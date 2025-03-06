@@ -34,8 +34,13 @@ export class PuppeteerService {
 			timeout: tiempoEsperaMaximo,
 			waitUntil: "domcontentloaded",
 		});
-		const h1Text = await this.page.$eval('[class*="css-9996wd"]', (el) => el.textContent?.trim());
-		console.log("Texto capturado:", h1Text);
+		// const h1Text = await this.page.$eval('[class*="css-9996wd"]', (el) => el.textContent?.trim());
+		// console.log("Texto capturado:", h1Text);
+
+		// const [element] = await this.page.$("//h1[contains(text(), 'hire')]");
+		// const h1Text = element ? await this.page.evaluate((el) => el.textContent.trim(), element) : "No encontrado";
+		// console.log("Texto capturado:", h1Text);
+
 		await this.page.screenshot({ path: `${currentDate.toISOString()}.png`});
 
         // waitNSeconds(15);
