@@ -10,7 +10,7 @@ export class PuppeteerService {
 
     private async iniciarPuppeteer() {
 		this.browser = await puppeteer.launch({ 
-			headless: false,
+			headless: true,
 		});
 	}
 
