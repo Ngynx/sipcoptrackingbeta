@@ -10,10 +10,13 @@ export class PuppeteerService {
 
     private async iniciarPuppeteer() {
 		this.browser = await puppeteer.launch({ 
-			// headless: true,
 			headless: true,
     		args: ['--no-sandbox', '--disable-setuid-sandbox']
 		});
+	}
+
+	async getIPAddress() {
+		return "127.0.0.1";
 	}
 
     async cerrarNavegador() {

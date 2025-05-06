@@ -3,12 +3,14 @@ import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { ConnectDatabaseUseCase } from './usecase/database/connect.usecase';
 import { UserModule } from './application/user/user.module';
 import { PuppeteerModule } from './application/puppeteer/puppeteer.module';
+import { STTModule } from './application/stt/stt.module';
 
 @Module({
   imports: [
     // DatabaseModule, 
     UserModule, 
-    PuppeteerModule
+    PuppeteerModule,
+    STTModule
   ],
   controllers: [],
   providers: [],

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Res } from "@nestjs/common";
+import { Controller, Get, Param, Post, Req, Res } from "@nestjs/common";
 import { PuppeteerService } from "./puppeteer.service";
 import { existsSync } from "fs";
 
@@ -7,6 +7,34 @@ export class PuppeteerController {
     constructor(
         private readonly puppeteerService: PuppeteerService
     ) {}
+
+	@Get('getIP')
+	async getIPAddress(
+		@Req() req: any,
+		@Res() res: any
+	) {
+		try {
+			const ip = req.ip;
+			console.log("ip: ", ip);
+			const ipHeaders = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+			console.log("ipHeaders: ", ipHeaders);
+			const data = await this.puppeteerService.scrapeJobList();
+			res.status(200);
+			return res.json({
+				success: true,
+				data: true,
+				message: "true"
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(400);
+			return res.json({
+				success: false,
+				data: null,
+				message: 'Error!'
+			});
+		}
+	}
 
     @Post('indeedPage')
 	async indeedPage(
