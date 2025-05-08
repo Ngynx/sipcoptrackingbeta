@@ -53,7 +53,7 @@ export class PuppeteerService {
 			ipAddress: ipAddress.reqBody.formatted,
 			createdAt: new Date(),
 			updatedAt: new Date()
-		}
+		};
 		return response
 	}
 
