@@ -14,16 +14,37 @@ export class PuppeteerController {
 		@Res() res: any
 	) {
 		try {
-			const ip = req.ip;
-			console.log("ip: ", ip);
-			const ipHeaders = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-			console.log("ipHeaders: ", ipHeaders);
-			const data = await this.puppeteerService.scrapeJobList();
+			const data = await this.puppeteerService.getIPAddress(req);
 			res.status(200);
 			return res.json({
 				success: true,
-				data: true,
-				message: "true"
+				data: data,
+				message: "IP address retrieved successfully"
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(400);
+			return res.json({
+				success: false,
+				data: null,
+				message: 'Error!'
+			});
+		}
+	}
+
+	@Get('getLocationByIP/')
+	async getLocationByIP(
+		// @Param("id") id: string,
+		@Res() res: any,
+		@Req() req: any
+	) {
+		try {
+			const data = await this.puppeteerService.getLocationByIPMaxMindProvider(req);
+			res.status(200);
+			return res.json({
+				success: true,
+				data: data,
+				message: "IP address retrieved successfully"
 			});
 		} catch (error) {
 			console.log(error);

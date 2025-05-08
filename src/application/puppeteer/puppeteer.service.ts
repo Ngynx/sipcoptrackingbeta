@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import * as puppeteer from "puppeteer";
+import maxmind, { CityResponse } from 'maxmind';
 
 
 @Injectable()
@@ -15,8 +16,27 @@ export class PuppeteerService {
 		});
 	}
 
-	async getIPAddress() {
-		return "127.0.0.1";
+	async getIPAddress(req: any): Promise<{reqBody: {raw: string, formatted: string}}> {
+		const ip = req.ip;
+		const ipHeaders = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+		return {
+			reqBody: {
+				raw: ip,
+				formatted: ip.replace('::ffff:', '')
+			},
+			// headers: {
+			// 	raw: ipHeaders,
+			// 	formatted: ipHeaders.replace('::ffff:', '')
+			// }
+		};
+	};
+	
+	// db local
+	async getLocationByIPMaxMindProvider(req: any) {
+		const lookup = await maxmind.open<CityResponse>('geolite2city.mmdb');
+		const ipAddress = await this.getIPAddress(req);
+		const getWithPrefixLength = lookup.getWithPrefixLength(ipAddress.reqBody.formatted);
+		return getWithPrefixLength
 	}
 
     async cerrarNavegador() {
