@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import * as puppeteer from "puppeteer";
 import maxmind, { CityResponse } from 'maxmind';
+import { IPLocation } from "./dto/iplocation.interface";
 
 
 @Injectable()
@@ -36,7 +37,24 @@ export class PuppeteerService {
 		const lookup = await maxmind.open<CityResponse>('geolite2city.mmdb');
 		const ipAddress = await this.getIPAddress(req);
 		const getWithPrefixLength = lookup.getWithPrefixLength(ipAddress.reqBody.formatted);
-		return getWithPrefixLength
+		// console.log("getWithPrefixLength: ", getWithPrefixLength);
+		const response: IPLocation = {
+			city: getWithPrefixLength && getWithPrefixLength[0] ? getWithPrefixLength[0].city.names.en : null,
+			country: getWithPrefixLength && getWithPrefixLength[0] ? getWithPrefixLength[0].country.names.en : null,
+			location: {
+				latitude: getWithPrefixLength && getWithPrefixLength[0] ? getWithPrefixLength[0].location.latitude : null,
+				longitude: getWithPrefixLength && getWithPrefixLength[0] ? getWithPrefixLength[0].location.longitude : null,
+				timezone: getWithPrefixLength && getWithPrefixLength[0] ? getWithPrefixLength[0].location.time_zone : null
+			},
+			subdivision: {
+				isoCode: getWithPrefixLength && getWithPrefixLength[0].subdivisions[0] ? getWithPrefixLength[0].subdivisions[0].iso_code : null,
+				name: getWithPrefixLength && getWithPrefixLength[0].subdivisions[0] ? getWithPrefixLength[0].subdivisions[0].names.en : null
+			},
+			ipAddress: ipAddress.reqBody.formatted,
+			createdAt: new Date(),
+			updatedAt: new Date()
+		}
+		return response
 	}
 
     async cerrarNavegador() {
