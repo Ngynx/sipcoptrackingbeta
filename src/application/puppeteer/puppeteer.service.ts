@@ -71,7 +71,7 @@ export class PuppeteerService {
 		);
 		await this.page.setViewport({ width: 1920, height: 1080 });
 		const tiempoEsperaMaximo = 320000;
-		await this.page.goto("https://www.indeed.com/reclutamiento", {
+		await this.page.goto("https://seguridadciudadana.mininter.gob.pe/sipcop-m/", {
 			timeout: tiempoEsperaMaximo,
 			waitUntil: "domcontentloaded",
 		});
