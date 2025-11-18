@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package sipcop;
+
+service TestService {
+  rpc EnviarDatoSimple(DatoSimple) returns (StatusResponse);
+  rpc EnviarIncidente(IncidentOutput) returns (StatusResponse);
+}
+
+message DatoSimple {
+  string mensaje = 1;
+}
+
+message StatusResponse {
+  int32 status_code = 1;
+  string status_text = 2;
+}
+
+message IncidentOutput {
+  string route_address = 1;
+  string _id = 2;
+  string subcategory_name_resolved = 3;
+  string subcategory_id = 4;
+  string incident_ticket_number = 5;
+  string incident_description = 6;
+  double taxpayer_location_latitude = 7;
+  double taxpayer_location_longitude = 8;
+  string incident_creation_date = 9; 
+
+  repeated IncidentVehicle incident_vehicles = 10;
+  repeated IncidentUser incident_users = 11;
+}
+
+message IncidentVehicle {
+  string _id = 1;
+  string vehicle_license_plate = 2;
+}
+
+message IncidentUser {
+  string _id = 1;
+  double user_dni = 2;
+  string user_fullname = 3;
+  string user_name = 4;
+  string user_lastname = 5;
+}
