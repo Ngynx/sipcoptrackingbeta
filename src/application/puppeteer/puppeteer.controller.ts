@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, Req, Res } from "@nestjs/common";
 import { PuppeteerService } from "./puppeteer.service";
 import { existsSync } from "fs";
 
@@ -94,4 +94,30 @@ export class PuppeteerController {
             return res.sendFile('no-image.png', { root: './' });
         }
     }
+
+	// ## turfjs
+	@Post('verifyPointTf')
+	async verifyPointTf(
+		@Body() dto: {point: any},
+		@Res() res: any,
+	) {
+		try {
+			const data = await this.puppeteerService.findMatchingPolygon(dto);
+			console.log("rsp: ", data);
+			res.status(200);
+			return res.json({
+				success: true,
+				data: data,
+				message: "true"
+			});
+		} catch (error) {
+			console.log(error);
+			res.status(400);
+			return res.json({
+				success: false,
+				data: null,
+				message: 'Error!'
+			});
+		}
+	}
 }
