@@ -20,9 +20,14 @@ export class PuppeteerService<T = any> implements OnApplicationBootstrap {
 
 	private browser: puppeteer.Browser;
 	private page: puppeteer.Page;
+	private _serverMode: object = null;
 
 	constructor() {
 		// this.prioritizedAreas = 
+		this._serverMode = {
+			headless: "new",
+			args: ['--no-sandbox', '--disable-setuid-sandbox']
+		};
 	}
 
 
@@ -119,10 +124,7 @@ export class PuppeteerService<T = any> implements OnApplicationBootstrap {
 
 
 	private async iniciarPuppeteer() {
-		this.browser = await puppeteer.launch({
-			headless: true,
-			args: ['--no-sandbox', '--disable-setuid-sandbox']
-		});
+		this.browser = await puppeteer.launch(this._serverMode);
 	}
 
 	async getIPAddress(req: any): Promise<{ reqBody: { raw: string, formatted: string } }> {
